@@ -1,0 +1,41 @@
+---
+- name : Install Gnome vim
+#  sudo : no
+  hosts: all
+  vars:
+  - home_dir: /home/archie
+  tasks:
+  - name: Install packages required by our Vim Config
+    apt: pkg={{item}} state=present
+    with_items:
+     - git
+     - rake
+     - vim
+     - vim-gnome
+     - exuberant-ctags
+     - silversearcher-ag
+
+  - name: Checkout pretty fonts
+    sudo: no
+    git: repo=git://github.com/powerline/fonts
+         dest="{{ home_dir }}/.fonts"
+         depth=1
+         update=true
+         accept_hostkey=yes
+
+  - name: Install pretty fonts
+    sudo: no
+    command: "{{ home_dir }}/.fonts/install.sh"
+
+  - name: Checkout our Vim Config
+    sudo: no
+    git: repo=git@github.com:yudikeren/vim-config.git
+         dest="{{ home_dir }}/.vim-config"
+         depth=1
+         update=true
+         accept_hostkey=yes
+
+  - name: Initialize our Vim Config
+    sudo: no
+    shell: yes | rake chdir="{{ home_dir }}/.vim-config/"
+
