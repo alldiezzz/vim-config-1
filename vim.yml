@@ -3,7 +3,7 @@
 #  sudo : no
   hosts: all
   vars:
-  - home_dir: /home/archie
+  - home_dir: ~/
   tasks:
   - name: Install packages required by our Vim Config
     apt: pkg={{item}} state=present
